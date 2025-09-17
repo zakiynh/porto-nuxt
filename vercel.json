@@ -1,9 +1,5 @@
 {
-  "builds": [
-    {
-      "src": "nuxt.config.*",
-      "use": "@nuxtjs/vercel-builder",
-      "config": {}
-    }
-  ]
+  "buildCommand": "npm run build",
+  "framework": "nuxtjs",
+  "installCommand": "npm install"
 }
