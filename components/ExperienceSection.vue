@@ -205,6 +205,7 @@
 
 <script setup lang="ts">
 import { TruckIcon, CodeBracketIcon } from '@heroicons/vue/24/outline'
+import { EXPERIENCE_DATES } from '../constants/personal'
 
 // Function to calculate duration between two dates
 const calculateDuration = (startDate: string, endDate?: string): string => {
@@ -252,29 +253,38 @@ const formatExperience = (startDate: string, endDate?: string): string => {
   return `${formatDate(start)} - ${endText} (${duration})`
 }
 
-// Calculate total experience
+// Calculate total experience from earliest job
 const calculateTotalExperience = (): string => {
-  // Start from first job
-  const firstJobStart = '2022-07-01'
-  return calculateDuration(firstJobStart)
+  // Get the earliest start date from all experiences
+  const allStartDates = Object.values(EXPERIENCE_DATES).map(exp => exp.startDate)
+  const earliestDate = allStartDates.reduce((earliest, current) => 
+    new Date(current) < new Date(earliest) ? current : earliest
+  )
+  return calculateDuration(earliestDate)
 }
 
-// Experience data with dates
+// Experience data using constants
 const experiences = {
   brik: {
-    startDate: '2025-08-01',
-    endDate: undefined, // Current job
-    formatted: computed(() => formatExperience('2025-08-12'))
+    ...EXPERIENCE_DATES.brik,
+    formatted: computed(() => formatExperience(
+      EXPERIENCE_DATES.brik.startDate, 
+      EXPERIENCE_DATES.brik.current ? undefined : undefined
+    ))
   },
   mrt: {
-    startDate: '2024-02-01',
-    endDate: '2025-08-01',
-    formatted: computed(() => formatExperience('2024-02-01', '2025-08-10'))
+    ...EXPERIENCE_DATES.mrt,
+    formatted: computed(() => formatExperience(
+      EXPERIENCE_DATES.mrt.startDate, 
+      EXPERIENCE_DATES.mrt.endDate
+    ))
   },
   datindo: {
-    startDate: '2022-07-01',
-    endDate: '2023-10-01',
-    formatted: computed(() => formatExperience('2022-07-01', '2023-10-01'))
+    ...EXPERIENCE_DATES.datindo,
+    formatted: computed(() => formatExperience(
+      EXPERIENCE_DATES.datindo.startDate, 
+      EXPERIENCE_DATES.datindo.endDate
+    ))
   }
 }
 

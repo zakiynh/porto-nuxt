@@ -40,8 +40,8 @@
                 <EnvelopeIcon class="w-10 h-10 text-white" />
               </div>
               <h4 class="font-bold text-white text-xl mb-3">Email</h4>
-              <a href="mailto:zakiynurhasyim@gmail.com" class="text-green-300 hover:text-green-200 transition-colors text-lg font-medium">
-                zakiynurhasyim@gmail.com
+              <a :href="`mailto:${PERSONAL_INFO.email}`" class="text-green-300 hover:text-green-200 transition-colors text-lg font-medium">
+                {{ PERSONAL_INFO.email }}
               </a>
               <p class="text-sm text-gray-400 mt-2">I'll respond within 24 hours</p>
             </div>
@@ -51,8 +51,8 @@
                 <PhoneIcon class="w-10 h-10 text-white" />
               </div>
               <h4 class="font-bold text-white text-xl mb-3">Phone</h4>
-              <a href="tel:+6281310466771" class="text-lime-300 hover:text-lime-200 transition-colors text-lg font-medium">
-                +62 813 104 667 71
+              <a :href="`tel:${PERSONAL_INFO.phone.replace(/\s/g, '')}`" class="text-lime-300 hover:text-lime-200 transition-colors text-lg font-medium">
+                {{ PERSONAL_INFO.phone }}
               </a>
               <p class="text-sm text-gray-400 mt-2">Available Mon-Fri, 9AM-6PM WIB</p>
             </div>
@@ -62,8 +62,7 @@
                 <MapPinIcon class="w-10 h-10 text-white" />
               </div>
               <h4 class="font-bold text-white text-xl mb-3">Location</h4>
-              <p class="text-yellow-300 text-lg font-medium">Depok, West Java</p>
-              <p class="text-yellow-300 text-lg font-medium">Indonesia</p>
+              <p class="text-yellow-300 text-lg font-medium">{{ PERSONAL_INFO.location }}</p>
               <p class="text-sm text-gray-400 mt-2">Available for remote work worldwide</p>
             </div>
           </div>
@@ -99,5 +98,6 @@
 </template>
 
 <script setup lang="ts">
+import { PERSONAL_INFO } from '../constants/personal'
 import { EnvelopeIcon, PhoneIcon, MapPinIcon } from '@heroicons/vue/24/outline'
 </script>

@@ -23,5 +23,8 @@ logs
 .env.*
 !.env.example
 
+# Personal constants (confidential)
+constants/personal.ts
+
 # folder
 .github

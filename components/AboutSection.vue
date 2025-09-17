@@ -24,7 +24,7 @@
             <div class="w-96 h-96 vue-card rounded-3xl overflow-hidden transform group-hover:scale-105 transition-all duration-500">
               <img 
                 src="../app/assets/profpict.jpeg" 
-                alt="M Zakiy Nurhasyim - Vue.js Developer"
+                :alt="`${PERSONAL_INFO.fullName} - Vue.js Developer`"
                 class="w-full h-full object-cover object-center"
               />
             </div>
@@ -44,7 +44,7 @@
           <div>
             <h3 class="text-4xl font-bold text-white mb-6">
               Hello! I'm 
-              <span class="text-vue">M Zakiy Nurhasyim</span>
+              <span class="text-vue">{{ PERSONAL_INFO.fullName }}</span>
             </h3>
             <div class="space-y-4 text-lg text-gray-300 leading-relaxed">
               <p>
@@ -113,6 +113,8 @@
 </template>
 
 <script setup lang="ts">
+import { PERSONAL_INFO } from '../constants/personal'
+
 const skills = [
   'Vue.js', 'Nuxt.js', 'Node.js', 'Express.js', 'Nest.js', 'React.js', 
   'MySQL', 'MongoDB', 'RabbitMQ', 'Redis', 'JavaScript', 'TypeScript', 'Docker'
