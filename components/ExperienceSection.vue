@@ -11,7 +11,7 @@
           <span class="text-vue">Experience</span>
         </h2>
         <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-          2+ years of building scalable web applications with modern technologies
+          {{ totalExperience }} of building scalable web applications with modern technologies
         </p>
       </div>
 
@@ -34,7 +34,7 @@
               </div>
               <h3 class="text-2xl font-bold text-white mb-2">Full Stack Engineer</h3>
               <h4 class="text-xl font-semibold text-orange-400 mb-2">BRIK</h4>
-              <p class="text-slate-300 font-medium mb-4">Aug 2025 - Present (2 months)</p>
+              <p class="text-slate-300 font-medium mb-4">{{ experiences.brik.formatted }}</p>
               <p class="text-slate-400 text-sm mb-6">Jakarta, Indonesia</p>
               
               <div class="space-y-4 text-slate-300">
@@ -76,7 +76,7 @@
               </div>
               <h3 class="text-2xl font-bold text-white mb-2">Software Developer</h3>
               <h4 class="text-xl font-semibold text-blue-300 mb-2">PT. MRT Jakarta</h4>
-              <p class="text-gray-300 font-medium mb-4">Feb 2024 - Aug 2025 (1 years 7 months)</p>
+              <p class="text-gray-300 font-medium mb-4">{{ experiences.mrt.formatted }}</p>
               <p class="text-gray-400 text-sm mb-6">Jakarta, Indonesia</p>
               
               <div class="space-y-4 text-gray-300">
@@ -137,7 +137,7 @@
               </div>
               <h3 class="text-2xl font-bold text-white mb-2">Full Stack Engineer</h3>
               <h4 class="text-xl font-semibold text-purple-400 mb-2">PT Datindo Infonet Prima</h4>
-              <p class="text-slate-300 font-medium mb-4">Jul 2022 - Oct 2023 (1 year 4 months)</p>
+              <p class="text-slate-300 font-medium mb-4">{{ experiences.datindo.formatted }}</p>
               <p class="text-slate-400 text-sm mb-6">Jakarta, Indonesia</p>
               
               <div class="space-y-4 text-slate-300">
@@ -168,7 +168,7 @@
         <div class="text-center mb-8">
           <h3 class="text-3xl font-bold text-white mb-4">Experience Summary</h3>
           <p class="text-slate-300 leading-relaxed max-w-3xl mx-auto">
-            Over 2+ years of navigating the universe of full-stack development, specializing in building scalable applications 
+            Over {{ totalExperience }} of navigating the universe of full-stack development, specializing in building scalable applications 
             that solve real-world problems and drive business efficiency across digital galaxies.
           </p>
         </div>
@@ -176,7 +176,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div class="text-center p-6 bg-slate-800/50 rounded-2xl shadow-md border border-slate-700/30">
             <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 space-glow">
-              <span class="text-2xl font-bold text-white">2+</span>
+              <span class="text-2xl font-bold text-white">{{ totalYears }}+</span>
             </div>
             <h4 class="font-semibold text-white mb-2">Years Experience</h4>
             <p class="text-slate-400 text-sm">In full-stack development</p>
@@ -205,6 +205,87 @@
 
 <script setup lang="ts">
 import { TruckIcon, CodeBracketIcon } from '@heroicons/vue/24/outline'
+
+// Function to calculate duration between two dates
+const calculateDuration = (startDate: string, endDate?: string): string => {
+  const start = new Date(startDate)
+  const end = endDate ? new Date(endDate) : new Date()
+  
+  const diffTime = Math.abs(end.getTime() - start.getTime())
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  
+  const years = Math.floor(diffDays / 365)
+  const months = Math.floor((diffDays % 365) / 30)
+  
+  let duration = ''
+  if (years > 0) {
+    duration += `${years} year${years > 1 ? 's' : ''}`
+    if (months > 0) {
+      duration += ` ${months} month${months > 1 ? 's' : ''}`
+    }
+  } else if (months > 0) {
+    duration += `${months} month${months > 1 ? 's' : ''}`
+  } else {
+    const weeks = Math.floor(diffDays / 7)
+    if (weeks > 0) {
+      duration += `${weeks} week${weeks > 1 ? 's' : ''}`
+    } else {
+      duration += `${diffDays} day${diffDays > 1 ? 's' : ''}`
+    }
+  }
+  
+  return duration
+}
+
+// Function to format date range with duration
+const formatExperience = (startDate: string, endDate?: string): string => {
+  const start = new Date(startDate)
+  const end = endDate ? new Date(endDate) : new Date()
+  
+  const formatDate = (date: Date): string => {
+    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+  }
+  
+  const duration = calculateDuration(startDate, endDate)
+  const endText = endDate ? formatDate(end) : 'Present'
+  
+  return `${formatDate(start)} - ${endText} (${duration})`
+}
+
+// Calculate total experience
+const calculateTotalExperience = (): string => {
+  // Start from first job
+  const firstJobStart = '2022-07-01'
+  return calculateDuration(firstJobStart)
+}
+
+// Experience data with dates
+const experiences = {
+  brik: {
+    startDate: '2025-08-01',
+    endDate: undefined, // Current job
+    formatted: computed(() => formatExperience('2025-08-12'))
+  },
+  mrt: {
+    startDate: '2024-02-01',
+    endDate: '2025-08-01',
+    formatted: computed(() => formatExperience('2024-02-01', '2025-08-10'))
+  },
+  datindo: {
+    startDate: '2022-07-01',
+    endDate: '2023-10-01',
+    formatted: computed(() => formatExperience('2022-07-01', '2023-10-01'))
+  }
+}
+
+const totalExperience = computed(() => calculateTotalExperience())
+
+// Calculate years for summary card
+const totalYears = computed(() => {
+  const duration = calculateTotalExperience()
+  const yearMatch = duration.match(/(\d+)\s+year/)
+  return yearMatch && yearMatch[1] ? parseInt(yearMatch[1]) : 3 // fallback to 3 if parsing fails
+})
 
 const brikTechnologies = [
   'TypeScript', 'Node.js', 'Nest.js', 'Vue.js', 'Nuxt.js', 
